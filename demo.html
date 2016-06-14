@@ -1,0 +1,76 @@
+<!doctype html>
+
+<head>
+  <title>selectorMenu &amp; Video.JS Example</title>
+  <link href="http://vjs.zencdn.net/5.0/video-js.min.css" rel="stylesheet">
+  <script src="http://vjs.zencdn.net/5.0/video.min.js"></script>
+  <script src="dist/vjs-selector-menu.min.js"></script>
+</head>
+
+<body>
+  <div style="width:700px;margin:0px auto;">
+    <video id="exampleVideo" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+      <source src="https://archive.org/download/ElephantsDream/ed_hd.mp4" type="video/mp4">
+      <source src="https://archive.org/download/ElephantsDream/ed_hd.ogv" type="video/ogv">
+    </video>
+  </div>
+
+  <small>Note: open your console</small>
+
+  <script>
+    videojs("exampleVideo", {
+      controls: true,
+      preload: "auto",
+      poster: "https://archive.org/download/ElephantsDream/ElephantsDream.thumbs/ed_1024_000030.jpg",
+      plugins: {
+        selectorMenu: {}
+      }
+    }, function() {
+
+      // menudataready event is fired when menuData is ready
+      this.on('menudataready', function(event, data) {
+        console.info('New event: menudataready: ', data.menuData);
+      });
+
+      // mediachange event is fired when the player media src changes
+      this.on('mediachange', function(event, data) {
+        console.info('Player source updated to: ', data.source);
+      });
+
+      // Trigger menudataready event is pre-processed data
+      this.trigger('menudataready', {
+        menuData: {
+          video: [{
+            id: 0,
+            selected: true,
+            label: '1080p',
+            src: 'https://archive.org/download/ElephantsDream/ed_1024.mp4',
+            type: 'video/mp4'
+          }, {
+            id: 1,
+            selected: false,
+            label: '720p',
+            src: 'https://archive.org/download/ElephantsDream/ed_hd.mp4',
+            type: 'video/mp4'
+          }]
+        },
+        onChange: function() {
+          var selection = this;
+          var player = videojs.getPlayers().exampleVideo;
+          var currentTime = player.currentTime();
+
+          player.src({
+            type: selection.type,
+            src: selection.src
+          });
+
+          player.currentTime(currentTime);
+          player.play();
+          player.trigger('mediachange', {
+            source: selection.label
+          });
+        }
+      });
+    });
+  </script>
+</body>

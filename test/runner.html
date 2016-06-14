@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Selector Menu Unit Tests</title>
+  <link rel="stylesheet" media="all" href="vendor/mocha.css">
+  <link href="http://vjs.zencdn.net/5.0/video-js.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="mocha"></div>
+  <div id="messages"></div>
+  <div id="fixtures" style="visibility:hidden">
+    <div style="width:700px;margin:0px auto;">
+      <video id="exampleVideo" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360">
+        <source src="https://archive.org/download/ElephantsDream/ed_hd.mp4" type="video/mp4">
+        <source src="https://archive.org/download/ElephantsDream/ed_hd.ogv" type="video/ogv">
+      </video>
+    </div>
+  </div>
+
+  <script src="./vendor/chai.js"></script>
+  <script src="./vendor/mocha.js"></script>
+  <script src="./vendor/sinon.js"></script>
+  <script src="./vendor/sinon-chai.js"></script>
+  <script src="./vendor/videojs.min.js"></script>
+  <script src="../dist/vjs-selector-menu.min.js"></script>
+
+  <script> mocha.setup('bdd'); </script>
+  <script src="spec.bundle.js"></script>
+  <script>
+    videojs("exampleVideo", {
+      debug: false,
+      controls: true,
+      preload: "auto",
+      plugins: {
+        selectorMenu: {}
+      }
+    }, function() {});
+
+    mocha.run();
+  </script>
+</body>
+
+</html>
